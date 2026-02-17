@@ -21,7 +21,7 @@ const categories = [
 
 const HighlightIcon: React.FC<{ label: string; active?: boolean; onClick?: () => void }> = ({ label, active, onClick }) => (
   <div 
-    className="flex flex-col items-center space-y-3 cursor-pointer group min-w-[100px]"
+    className="flex flex-col items-center space-y-3 cursor-pointer group min-w-[100px] reveal"
     onClick={onClick}
   >
     <div className={`relative w-20 h-20 rounded-full bg-white flex items-center justify-center border-4 ${active ? 'border-neutral-400' : 'border-neutral-800'} group-hover:border-white group-hover:scale-110 transition-all duration-500 shadow-xl overflow-hidden`}>
@@ -58,7 +58,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ photos, albums }) => {
     <section id="portfolio" className="py-24 bg-neutral-900 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 reveal">
           <span className="text-neutral-500 tracking-[0.2em] text-sm font-bold uppercase">Nossa Arte</span>
           <h2 className="font-serif text-4xl md:text-5xl text-white mt-3 mb-12">Portfólio & Eventos</h2>
           
@@ -116,7 +116,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ photos, albums }) => {
             </button>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
-              <div className="lg:col-span-1">
+              <div className="lg:col-span-1 reveal">
                 <div className="sticky top-24">
                   <span className="inline-flex items-center px-3 py-1 bg-white/5 text-white text-[10px] font-bold rounded-full mb-4 border border-white/10 uppercase tracking-widest">
                     <Calendar className="w-3 h-3 mr-2" />
@@ -131,10 +131,10 @@ const Portfolio: React.FC<PortfolioProps> = ({ photos, albums }) => {
               </div>
 
               <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {selectedAlbum.photos.map((photo) => (
+                {selectedAlbum.photos.map((photo, index) => (
                   <div 
                     key={photo.id} 
-                    className="group relative overflow-hidden cursor-pointer rounded-sm aspect-[3/4] rollover-img-container"
+                    className={`group relative overflow-hidden cursor-pointer rounded-sm aspect-[3/4] rollover-img-container reveal delay-${(index % 3) * 100}`}
                     onClick={() => setSelectedPhoto(photo)}
                   >
                     <img 
@@ -153,11 +153,11 @@ const Portfolio: React.FC<PortfolioProps> = ({ photos, albums }) => {
             </div>
           </div>
         ) : activeView === 'albums' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-[fadeIn_0.5s_ease-out]">
-            {filteredAlbums.length > 0 ? filteredAlbums.map((album) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {filteredAlbums.length > 0 ? filteredAlbums.map((album, index) => (
               <div 
                 key={album.id} 
-                className="group cursor-pointer bg-neutral-950 rounded-lg overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl hover-lift"
+                className={`group cursor-pointer bg-neutral-950 rounded-lg overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl hover-lift reveal delay-${(index % 2) * 100}`}
                 onClick={() => handleAlbumClick(album)}
               >
                 <div className="relative h-72 overflow-hidden">
@@ -182,17 +182,17 @@ const Portfolio: React.FC<PortfolioProps> = ({ photos, albums }) => {
                 </div>
               </div>
             )) : (
-              <div className="col-span-full py-20 text-center border border-dashed border-white/5 rounded-lg">
+              <div className="col-span-full py-20 text-center border border-dashed border-white/5 rounded-lg reveal">
                 <p className="text-neutral-500 uppercase tracking-widest text-sm">Nenhum álbum encontrado.</p>
               </div>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-[fadeIn_0.5s_ease-out]">
-            {photos.map((photo) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {photos.map((photo, index) => (
               <div 
                 key={photo.id} 
-                className="group relative overflow-hidden cursor-pointer rounded-sm rollover-img-container"
+                className={`group relative overflow-hidden cursor-pointer rounded-sm rollover-img-container reveal delay-${(index % 3) * 100}`}
                 onClick={() => setSelectedPhoto(photo)}
               >
                 <div className="aspect-[3/4] w-full overflow-hidden bg-neutral-800">

@@ -51,6 +51,10 @@
       * {
         cursor: none !important;
       }
+      html {
+        /* Garante que o scroll nativo seja o mais fluido possível */
+        scrollbar-gutter: stable;
+      }
       ::-webkit-scrollbar {
         width: 6px;
       }
@@ -64,29 +68,63 @@
         background: #fff;
       }
 
-      /* Custom Cursor Styles */
+      /* Scroll Progress Bar - Transição Suave */
+      #progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: white;
+        z-index: 100;
+        width: 0%;
+        transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      /* Fluid Reveal on Scroll - Bidirecional */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+        filter: blur(5px);
+        transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform, opacity, filter;
+      }
+      
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+      }
+
+      /* Staggered Reveal delay utilities */
+      .delay-100 { transition-delay: 100ms; }
+      .delay-200 { transition-delay: 200ms; }
+      .delay-300 { transition-delay: 300ms; }
+      .delay-400 { transition-delay: 400ms; }
+
+      /* Custom Cursor Styles - Inércia Melhorada */
       .custom-cursor {
-        width: 20px;
-        height: 20px;
+        width: 12px;
+        height: 12px;
         background: white;
         border-radius: 50%;
         position: fixed;
         pointer-events: none;
         z-index: 9999;
         mix-blend-mode: difference;
-        transition: transform 0.2s ease-out, width 0.3s ease, height 0.3s ease;
+        transition: transform 0.2s ease-out;
         transform: translate(-50%, -50%);
       }
 
       .custom-cursor-outline {
-        width: 40px;
-        height: 40px;
-        border: 1px solid rgba(255,255,255,0.5);
+        width: 45px;
+        height: 45px;
+        border: 1px solid rgba(255,255,255,0.3);
         border-radius: 50%;
         position: fixed;
         pointer-events: none;
         z-index: 9998;
-        transition: transform 0.15s ease-out;
+        /* Duração maior para criar efeito de "arraste" */
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         transform: translate(-50%, -50%);
       }
 
@@ -95,26 +133,26 @@
         background: white;
       }
 
-      /* Image Rollover Effects */
+      /* Image Rollover Effects - Suavizados */
       .rollover-img-container {
         overflow: hidden;
         position: relative;
       }
       .rollover-img {
-        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.8s ease;
+        transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), filter 1.2s ease;
       }
       .rollover-img-container:hover .rollover-img {
-        transform: scale(1.1);
+        transform: scale(1.08);
         filter: grayscale(0%) brightness(1.1);
       }
 
       /* Global Hover Transitions */
       .hover-lift {
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease;
       }
       .hover-lift:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(255,255,255,0.05);
+        transform: translateY(-12px);
+        box-shadow: 0 30px 60px rgba(255,255,255,0.08);
       }
 
       /* No scrollbar utility */
@@ -138,7 +176,8 @@
 }
 </script>
 </head>
-  <body class="bg-black text-neutral-200 font-sans antialiased selection:bg-white selection:text-black">
+  <body class="bg-black text-neutral-200 font-sans antialiased selection:bg-white selection:text-black overflow-x-hidden">
+    <div id="progress-bar"></div>
     <div id="cursor" class="custom-cursor"></div>
     <div id="cursor-outline" class="custom-cursor-outline"></div>
     <div id="root"></div>
@@ -146,26 +185,53 @@
     <script>
       const cursor = document.getElementById('cursor');
       const cursorOutline = document.getElementById('cursor-outline');
+      const progressBar = document.getElementById('progress-bar');
 
+      // Scroll Progress & Bidirectional Reveal Logic
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        progressBar.style.width = scrolled + "%";
+        
+        // Reveal Logic - Agora remove a classe 'active' ao sair da tela para efeito ao subir
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(reveal => {
+          const windowHeight = window.innerHeight;
+          const elementTop = reveal.getBoundingClientRect().top;
+          const elementBottom = reveal.getBoundingClientRect().bottom;
+          const elementVisible = 100;
+          
+          if (elementTop < windowHeight - elementVisible && elementBottom > elementVisible) {
+            reveal.classList.add('active');
+          } else {
+            // Remove a classe ao subir, criando o efeito de "sumir" suavemente
+            reveal.classList.remove('active');
+          }
+        });
+      }, { passive: true });
+
+      // Cursor movement com suavização nativa via animate()
       window.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
         
-        // Outline with a slight delay for smoothing
         cursorOutline.animate({
           left: `${e.clientX}px`,
           top: `${e.clientY}px`
-        }, { duration: 500, fill: "forwards" });
-      });
+        }, { duration: 600, fill: "forwards", easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
+      }, { passive: true });
 
       document.addEventListener('mouseover', (e) => {
-        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a') || e.target.classList.contains('cursor-pointer') || e.target.closest('.cursor-pointer')) {
+        const target = e.target;
+        if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('button') || target.closest('a') || target.classList.contains('cursor-pointer') || target.closest('.cursor-pointer')) {
           cursor.classList.add('cursor-hover');
         }
       });
 
       document.addEventListener('mouseout', (e) => {
-        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a') || e.target.classList.contains('cursor-pointer') || e.target.closest('.cursor-pointer')) {
+        const target = e.target;
+        if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('button') || target.closest('a') || target.classList.contains('cursor-pointer') || target.closest('.cursor-pointer')) {
           cursor.classList.remove('cursor-hover');
         }
       });

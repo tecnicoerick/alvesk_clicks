@@ -49,22 +49,49 @@ const TypingText: React.FC<{
 
 const Hero: React.FC = () => {
   const [step, setStep] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    let requestRef: number;
+    
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      requestRef = requestAnimationFrame(() => {});
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(requestRef);
+    };
+  }, []);
 
   return (
     <section id="home" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
-      {/* Background Image with Enhanced Motion Effect */}
+      {/* Background Image with Smoother Parallax */}
       <div className="absolute inset-0 z-0 bg-black">
-        <img 
-          src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1920" 
-          alt="Alvesk Clicks Photographer" 
-          className="w-full h-full object-cover animate-ken-burns opacity-50 grayscale" 
-          style={{ filter: 'grayscale(100%) contrast(1.2) brightness(0.4)' }}
-        />
+        <div 
+          className="w-full h-full overflow-hidden will-change-transform"
+          style={{ 
+            transform: `translateY(${scrollY * 0.3}px)`,
+            transition: 'transform 0.1s linear' // Pequena suavização extra para evitar jitter
+          }}
+        >
+          <img 
+            src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1920" 
+            alt="Alvesk Clicks Photographer" 
+            className="w-full h-full object-cover animate-ken-burns opacity-50 grayscale" 
+            style={{ filter: 'grayscale(100%) contrast(1.2) brightness(0.4)' }}
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-neutral-950"></div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      <div 
+        className="relative z-10 text-center px-4 max-w-4xl mx-auto will-change-transform"
+        style={{ transform: `translateY(-${scrollY * 0.15}px)` }}
+      >
         <p className="text-white font-medium tracking-[0.5em] mb-4 min-h-[1.5rem]">
           <TypingText 
             text="ALVESK_CLICKS" 
@@ -90,18 +117,10 @@ const Hero: React.FC = () => {
           />
         </h1>
 
-        <div className={`transition-opacity duration-1000 ${step >= 3 ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`transition-all duration-1000 ${step >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <p className="text-neutral-500 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light uppercase tracking-widest">
             Fotografia Profissional | Momentos Eternizados
           </p>
-          <div>
-            <a 
-              href="#portfolio" 
-              className="inline-block px-10 py-4 border border-white text-white font-medium tracking-widest hover:bg-white hover:text-black transition-all duration-500 rounded-none"
-            >
-              EXPLORAR GALERIA
-            </a>
-          </div>
         </div>
       </div>
 

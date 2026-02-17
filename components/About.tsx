@@ -9,7 +9,7 @@ const About: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* Image Side with Decorative Element */}
-          <div className="relative group">
+          <div className="relative group reveal">
             <div className="absolute -inset-4 border border-white/10 translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-500 hidden md:block"></div>
             <div className="relative aspect-[4/5] overflow-hidden grayscale contrast-125">
               <img 
@@ -26,7 +26,7 @@ const About: React.FC = () => {
           </div>
 
           {/* Text Side */}
-          <div>
+          <div className="reveal delay-200">
             <span className="text-neutral-500 tracking-[0.3em] text-sm font-bold uppercase block mb-4">A Lente por trás do Contraste</span>
             <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-8 leading-tight">
               Eternizando o que <br />
@@ -46,12 +46,12 @@ const About: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-8 mt-12 pt-12 border-t border-white/10">
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-2 reveal delay-300">
                 <Camera className="w-6 h-6 text-white mb-2" />
                 <h4 className="text-white font-bold text-sm tracking-widest uppercase">Visão Única</h4>
                 <p className="text-neutral-500 text-xs uppercase tracking-wider">Composição artística e técnica apurada.</p>
               </div>
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-2 reveal delay-300">
                 <Users className="w-6 h-6 text-white mb-2" />
                 <h4 className="text-white font-bold text-sm tracking-widest uppercase">Conexão Humana</h4>
                 <p className="text-neutral-500 text-xs uppercase tracking-wider">Sensibilidade para entender cada história.</p>
