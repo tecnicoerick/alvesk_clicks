@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import EventSlider from './components/EventSlider';
 import Portfolio from './components/Portfolio';
+import VideoReels from './components/VideoReels';
 import Services from './components/Services';
 import About from './components/About';
 import Contact from './components/Contact';
@@ -10,7 +12,7 @@ import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import { PhotoItem, Album } from './types';
 
-// Initial Photos (Highlights) - Atualizado para conter apenas a foto solicitada
+// Initial Photos (Highlights)
 const initialPhotos: PhotoItem[] = [
   { 
     id: 1, 
@@ -18,6 +20,20 @@ const initialPhotos: PhotoItem[] = [
     title: "O Beijo Eterno", 
     category: "Casamento",
     description: "A celebração máxima do amor em uma captura atemporal em preto e branco, marcada pela chuva de confetes e a alegria contagiante do momento."
+  },
+  { 
+    id: 2, 
+    url: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=800", 
+    title: "Luz de Outono", 
+    category: "Externo",
+    description: "Ensaio realizado durante a golden hour, explorando as texturas e os tons quentes da estação."
+  },
+  { 
+    id: 3, 
+    url: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&q=80&w=800", 
+    title: "Portrait Urban", 
+    category: "Moda",
+    description: "O contraste entre a suavidade do olhar e a crueza do concreto urbano."
   }
 ];
 
@@ -58,7 +74,9 @@ const App: React.FC = () => {
       
       <main>
         <Hero />
+        <EventSlider />
         <Portfolio photos={photos} albums={albums} />
+        <VideoReels />
         <About />
         <Services />
         <Contact />
