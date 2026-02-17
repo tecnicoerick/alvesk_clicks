@@ -19,7 +19,7 @@
             },
             colors: {
               gold: {
-                400: '#ffffff', // Mudando gold para branco/prata para o modo P&B
+                400: '#ffffff',
                 500: '#e5e5e5',
                 600: '#a3a3a3',
               }
@@ -48,6 +48,9 @@
       }
     </script>
     <style>
+      * {
+        cursor: none !important;
+      }
       ::-webkit-scrollbar {
         width: 6px;
       }
@@ -60,13 +63,67 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #fff;
       }
-      /* Global grayscale utility if needed */
-      .img-bw {
-        filter: grayscale(100%);
-        transition: filter 0.5s ease;
+
+      /* Custom Cursor Styles */
+      .custom-cursor {
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transition: transform 0.2s ease-out, width 0.3s ease, height 0.3s ease;
+        transform: translate(-50%, -50%);
       }
-      .img-bw:hover {
-        filter: grayscale(0%);
+
+      .custom-cursor-outline {
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(255,255,255,0.5);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9998;
+        transition: transform 0.15s ease-out;
+        transform: translate(-50%, -50%);
+      }
+
+      .cursor-hover {
+        transform: translate(-50%, -50%) scale(2.5);
+        background: white;
+      }
+
+      /* Image Rollover Effects */
+      .rollover-img-container {
+        overflow: hidden;
+        position: relative;
+      }
+      .rollover-img {
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.8s ease;
+      }
+      .rollover-img-container:hover .rollover-img {
+        transform: scale(1.1);
+        filter: grayscale(0%) brightness(1.1);
+      }
+
+      /* Global Hover Transitions */
+      .hover-lift {
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(255,255,255,0.05);
+      }
+
+      /* No scrollbar utility */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
       }
     </style>
   <script type="importmap">
@@ -82,6 +139,36 @@
 </script>
 </head>
   <body class="bg-black text-neutral-200 font-sans antialiased selection:bg-white selection:text-black">
+    <div id="cursor" class="custom-cursor"></div>
+    <div id="cursor-outline" class="custom-cursor-outline"></div>
     <div id="root"></div>
+
+    <script>
+      const cursor = document.getElementById('cursor');
+      const cursorOutline = document.getElementById('cursor-outline');
+
+      window.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // Outline with a slight delay for smoothing
+        cursorOutline.animate({
+          left: `${e.clientX}px`,
+          top: `${e.clientY}px`
+        }, { duration: 500, fill: "forwards" });
+      });
+
+      document.addEventListener('mouseover', (e) => {
+        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a') || e.target.classList.contains('cursor-pointer') || e.target.closest('.cursor-pointer')) {
+          cursor.classList.add('cursor-hover');
+        }
+      });
+
+      document.addEventListener('mouseout', (e) => {
+        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a') || e.target.classList.contains('cursor-pointer') || e.target.closest('.cursor-pointer')) {
+          cursor.classList.remove('cursor-hover');
+        }
+      });
+    </script>
   </body>
 </html>
