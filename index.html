@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth scroll-pt-24">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alvesk_Clicks | Fotografia Profissional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['Cinzel', 'serif'],
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              gold: {
+                400: '#ffffff', // Mudando gold para branco/prata para o modo P&B
+                500: '#e5e5e5',
+                600: '#a3a3a3',
+              }
+            },
+            animation: {
+              'ken-burns': 'kenBurns 25s ease-in-out infinite alternate',
+              'fade-in-down': 'fadeInDown 1s ease-out both',
+              'fade-in-up': 'fadeInUp 1s ease-out both',
+            },
+            keyframes: {
+              kenBurns: {
+                '0%': { transform: 'scale(1) translate(0, 0)' },
+                '100%': { transform: 'scale(1.2) translate(-2%, -1%)' },
+              },
+              fadeInDown: {
+                '0%': { opacity: '0', transform: 'translateY(-20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #fff;
+      }
+      /* Global grayscale utility if needed */
+      .img-bw {
+        filter: grayscale(100%);
+        transition: filter 0.5s ease;
+      }
+      .img-bw:hover {
+        filter: grayscale(0%);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-black text-neutral-200 font-sans antialiased selection:bg-white selection:text-black">
+    <div id="root"></div>
+  </body>
+</html>
